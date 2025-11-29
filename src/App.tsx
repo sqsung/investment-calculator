@@ -1,16 +1,9 @@
-function App() {
-  const name = "james";
-
+const App = () => {
   return (
-    <div className="min-h-screen">
-      <p className="custom-class custom-class-1 bg-red-500 text-center text-4xl font-bold text-yellow-500 hover:text-blue-500">
-        {name}
-      </p>
-      <p className="custom-class custom-class-3 text-4xl hover:bg-red-500">
-        Hello world!
-      </p>
+    <div className="min-h-screen bg-zinc-900 p-5">
+      <h1 className="text-2xl font-bold text-white">포트폴리오 리밸런싱</h1>
     </div>
   );
-}
+};
 
 export default App;
