@@ -32,13 +32,13 @@ const App = () => {
               </TableHead>
             </TableHeader>
             <TableBody className="flex h-full flex-col bg-white">
-              <TableRow className="borer-zinc-100 flex w-full flex-1 border"></TableRow>
-              <TableRow className="borer-zinc-100 flex w-full flex-1 border"></TableRow>
-              <TableRow className="borer-zinc-100 flex w-full flex-1 border"></TableRow>
-              <TableRow className="borer-zinc-100 flex w-full flex-1 border"></TableRow>
-              <TableRow className="borer-zinc-100 flex w-full flex-1 border"></TableRow>
-              <TableRow className="borer-zinc-100 flex w-full flex-1 border"></TableRow>
-              <TableRow className="borer-zinc-100 flex w-full flex-1 border"></TableRow>
+              <TableRow className="flex w-full flex-1"></TableRow>
+              <TableRow className="flex w-full flex-1"></TableRow>
+              <TableRow className="flex w-full flex-1"></TableRow>
+              <TableRow className="flex w-full flex-1"></TableRow>
+              <TableRow className="flex w-full flex-1"></TableRow>
+              <TableRow className="flex w-full flex-1"></TableRow>
+              <TableRow className="flex w-full flex-1"></TableRow>
               <TableFooter className="mt-auto h-[50px] border-t border-zinc-300 bg-zinc-900"></TableFooter>
             </TableBody>
           </Table>
