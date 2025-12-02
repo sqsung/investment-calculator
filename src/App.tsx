@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
-import CalculatorPage from "./pages/calculator/CalculatorPage";
-import SettingsPage from "./pages/settings/SettingsPage";
+import CalculatorPage from "./pages/calculator";
+import SettingsPage from "./pages/settings";
 
 const App = () => {
   return (

@@ -3,7 +3,7 @@ export const CATEGORIES = {
   bonds: "국채",
   alternatives: "대체 투자",
   cash: "인출금",
-};
+} as const;
 
 export const DEFAULT_PORTFOLIO: Portfolio = [
   {
@@ -70,3 +70,8 @@ export const DEFAULT_PORTFOLIO: Portfolio = [
     holding: 0,
   },
 ];
+
+export const PATHS = {
+  calculator: "/",
+  settings: "/settings",
+} as const;

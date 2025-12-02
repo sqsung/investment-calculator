@@ -1,4 +1,4 @@
-import type { CATEGORIES } from "@/constants";
+import type { CATEGORIES, PATHS } from "@/constants";
 
 export {};
 
@@ -8,6 +8,8 @@ declare global {
   }
 
   type PortfolioCategory = keyof typeof CATEGORIES;
+
+  type Path = (typeof PATHS)[keyof typeof PATHS];
 
   interface Holding {
     name: string;

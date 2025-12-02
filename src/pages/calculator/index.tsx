@@ -1,11 +1,22 @@
+import { useEffect } from "react";
+import { usePortfolio } from "@/context/PortfolioContext";
 import Classifier from "@/components/Classifier";
 import TableHeader from "@/components/TableHeader";
 import TableRow from "@/components/TableRow";
 import { Table, TableBody, TableFooter } from "@/components/ui/table";
-import { usePortfolio } from "@/context/PortfolioContext";
 
 const CalculatorPage = () => {
   const { portfolio } = usePortfolio();
+
+  const rebalance = () => {
+    alert("리밸런싱 시작!!");
+  };
+
+  useEffect(() => {
+    window.addEventListener("calculator:run", rebalance);
+
+    return () => window.removeEventListener("calculator:run", rebalance);
+  }, []);
 
   return (
     <div className="flex-1 px-1 py-3">

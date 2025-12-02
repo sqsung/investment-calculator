@@ -1,34 +1,52 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
-import { Calculator, Settings2 } from "lucide-react";
+import { RefreshCcw, Settings2 } from "lucide-react";
+import { PATHS } from "@/constants";
+import clsx from "clsx";
+
+const BUTTONS = [
+  { label: "리밸런싱", icon: <RefreshCcw />, path: PATHS.calculator },
+  { label: "설정", icon: <Settings2 />, path: PATHS.settings },
+];
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  const onCalculate = () => {
+    window.dispatchEvent(new CustomEvent("calculator:run"));
+  };
 
   return (
     <div className="flex flex-col gap-3 bg-white p-3">
       <h1 className="text-2xl font-bold tracking-wide">PF/RB</h1>
+      {BUTTONS.map((button) => {
+        const isActive = button.path === pathname;
+
+        return (
+          <Button
+            key={button.label}
+            variant={isActive ? "default" : "ghost"}
+            onClick={() => navigate(button.path)}
+            className={clsx(
+              "w-52 justify-start",
+              isActive
+                ? "bg-zinc-200 text-black hover:bg-zinc-300 active:bg-zinc-300"
+                : "variant-ghost hover:bg-zinc-100",
+            )}
+          >
+            {button.icon}
+            <span>{button.label}</span>
+          </Button>
+        );
+      })}
       <Button
-        className="w-52 justify-start bg-zinc-200 text-black"
-        variant="default"
-        onClick={() => {
-          navigate("/");
-        }}
+        disabled={pathname !== PATHS.calculator}
+        onClick={onCalculate}
+        className="mt-auto w-52"
       >
-        <Calculator></Calculator>
-        계산기
+        계산하기
       </Button>
-      <Button
-        className="w-52 justify-start"
-        variant="ghost"
-        onClick={() => {
-          navigate("/settings");
-        }}
-      >
-        <Settings2 />
-        설정
-      </Button>
-      <Button className="mt-auto w-52">계산하기</Button>
     </div>
   );
 };
