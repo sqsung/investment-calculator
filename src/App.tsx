@@ -1,14 +1,15 @@
 import { Routes, Route } from "react-router-dom";
-import MainLayout from "./layout/MainLayout";
-import CalculatorPage from "./pages/calculator";
-import SettingsPage from "./pages/settings";
+import MainLayout from "@/layout/MainLayout";
+import { CalculatorPage } from "@/modules/calculator";
+import { SettingsPage } from "@/modules/settings";
+import { PATHS } from "@/constants";
 
 const App = () => {
   return (
     <Routes>
       <Route element={<MainLayout />}>
-        <Route path="/" element={<CalculatorPage />} />
-        <Route path="/settings" element={<SettingsPage />} />
+        <Route path={PATHS.calculator} element={<CalculatorPage />} />
+        <Route path={PATHS.settings} element={<SettingsPage />} />
       </Route>
     </Routes>
   );

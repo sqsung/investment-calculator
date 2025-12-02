@@ -1,11 +1,10 @@
 import { useEffect } from "react";
 import { usePortfolio } from "@/context/PortfolioContext";
-import Classifier from "@/components/Classifier";
-import TableHeader from "@/components/TableHeader";
-import TableRow from "@/components/TableRow";
-import { Table, TableBody, TableFooter } from "@/components/ui/table";
+import { Table, TableBody, TableFooter } from "@/ui";
+import { TableRow, Classifier, TableHeader } from "@/modules/calculator";
+import OutletWrapper from "@/layout/OutletWrapper";
 
-const CalculatorPage = () => {
+export const CalculatorPage = () => {
   const { portfolio } = usePortfolio();
 
   const rebalance = () => {
@@ -19,7 +18,7 @@ const CalculatorPage = () => {
   }, []);
 
   return (
-    <div className="flex-1 px-1 py-3">
+    <OutletWrapper>
       <div className="flex h-full w-full overflow-hidden rounded-2xl border border-zinc-300 bg-zinc-100">
         <Classifier />
         <Table className="flex h-full w-full flex-col">
@@ -36,8 +35,6 @@ const CalculatorPage = () => {
           </TableBody>
         </Table>
       </div>
-    </div>
+    </OutletWrapper>
   );
 };
-
-export default CalculatorPage;

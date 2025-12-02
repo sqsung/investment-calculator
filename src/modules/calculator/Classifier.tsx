@@ -1,4 +1,4 @@
-import { TableHead } from "./ui/table";
+import { TableHead } from "@/ui";
 
 const VARIANTS = [
   {
@@ -19,7 +19,7 @@ const VARIANTS = [
   },
 ];
 
-const Classifier = () => {
+export const Classifier = () => {
   return (
     <div className="flex w-[120px] flex-col border-e border-zinc-700">
       <TableHead className="flex items-center justify-center border-b border-zinc-700 bg-zinc-900 py-2 text-sm font-bold text-white">
@@ -41,5 +41,3 @@ const Classifier = () => {
     </div>
   );
 };
-
-export default Classifier;

@@ -1,6 +1,6 @@
-import { TableHeader as BaseTableHeader, TableHead } from "./ui/table";
+import { TableHeader as BaseTableHeader, TableHead } from "@/ui";
 
-const TableHeader = () => {
+export const TableHeader = () => {
   return (
     <BaseTableHeader className="flex border-b border-zinc-300 bg-zinc-900">
       <TableHead className="flex flex-1 items-center justify-center py-2 text-sm font-bold text-white">
@@ -21,5 +21,3 @@ const TableHeader = () => {
     </BaseTableHeader>
   );
 };
-
-export default TableHeader;

@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button } from "./ui/button";
 import { RefreshCcw, Settings2 } from "lucide-react";
+import { Button } from "@/ui";
 import { PATHS } from "@/constants";
 import clsx from "clsx";
 
@@ -9,7 +9,7 @@ const BUTTONS = [
   { label: "설정", icon: <Settings2 />, path: PATHS.settings },
 ];
 
-const Sidebar = () => {
+export const Sidebar = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
@@ -50,5 +50,3 @@ const Sidebar = () => {
     </div>
   );
 };
-
-export default Sidebar;

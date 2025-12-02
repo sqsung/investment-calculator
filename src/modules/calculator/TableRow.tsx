@@ -1,12 +1,11 @@
-import { Input } from "./ui/input";
-import { TableCell, TableRow as BaseTableRow } from "./ui/table";
+import { Input, TableCell, TableRow as BaseTableRow } from "@/ui";
 
 interface RebalancingRowProps {
   name: string;
   description: string;
 }
 
-const TableRow = ({ name, description }: RebalancingRowProps) => {
+export const TableRow = ({ name, description }: RebalancingRowProps) => {
   return (
     <BaseTableRow className="flex w-full flex-1">
       <TableCell className="flex flex-1 flex-col items-center justify-center gap-1">
