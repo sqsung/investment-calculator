@@ -27,12 +27,12 @@ const Classifier = () => {
       </TableHead>
       <div className="flex flex-1 flex-col text-sm text-zinc-300">
         {VARIANTS.map(({ label, className }) => (
-          <p
+          <span
             key={label}
             className={`flex items-center justify-center border-b border-zinc-700 bg-zinc-800 text-sm font-bold ${className}`}
           >
             {label}
-          </p>
+          </span>
         ))}
         <p className="flex h-[50px] items-center justify-center bg-zinc-900 text-sm font-bold">
           합계
