@@ -2,7 +2,7 @@ import { CATEGORIES } from "@/constants";
 import { usePortfolio } from "@/context/PortfolioContext";
 import { HoldingItem } from "@/modules/settings";
 import { EmptyFallback } from "@/modules/shared";
-import { getGroupedPortfolio } from "@/utils";
+import { getGroupedPortfolio, getPercentagesByCategory } from "@/utils";
 
 const checkIsValidCategory = (
   subject: string,
@@ -25,13 +25,17 @@ export const GroupedPortfolioSection = ({
 
   const grouped = getGroupedPortfolio(portfolio);
   const holdings = grouped[category];
+  const { growth, stable } = getPercentagesByCategory(portfolio, category);
   const labelInKorean = CATEGORIES[category];
 
   return (
     <li className="flex flex-col gap-5 rounded-xl border border-zinc-300 bg-white p-3">
-      <span className="border-b border-zinc-300 pb-1 text-zinc-700">
-        {labelInKorean}
-      </span>
+      <div className="flex items-center justify-between border-b border-zinc-200 pb-1">
+        <span className="text-zinc-700">{labelInKorean}</span>
+        <span className="text-sm text-zinc-400">
+          안정 {stable}% / 성장 {growth}%
+        </span>
+      </div>
       <ul className="flex flex-col gap-2">
         {!holdings.length ? (
           <EmptyFallback />
