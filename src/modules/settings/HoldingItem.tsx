@@ -1,12 +1,50 @@
-import { Button } from "@/modules/ui";
-import { cn } from "@/utils";
+import { useState } from "react";
 import { Trash } from "lucide-react";
+import { usePortfolio } from "@/context/PortfolioContext";
+import { ConfirmDialog } from "@/modules/shared/ConfirmDialog";
+import { Button, Dialog, DialogTrigger } from "@/modules/ui";
+import { toast } from "sonner";
+import { cn } from "@/utils";
 
-const DeleteButton = () => {
+interface DeleteHoldingButtonProps {
+  name: string;
+}
+
+const DeleteHoldingButton = ({ name }: DeleteHoldingButtonProps) => {
+  const { deleteHolding } = usePortfolio();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const onDelete = () => {
+    deleteHolding(name);
+
+    const id = toast("삭제했습니다", {
+      action: {
+        label: "확인",
+        onClick: () => toast.dismiss(id),
+      },
+    });
+  };
+
   return (
-    <Button variant="ghost" className="ml-auto flex items-center gap-3">
-      <Trash className="text-zinc-500" />
-    </Button>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <DialogTrigger asChild={true}>
+        <Button
+          onClick={() => setIsDialogOpen(true)}
+          variant="ghost"
+          className="ml-auto flex items-center gap-3"
+        >
+          <Trash className="text-zinc-500" />
+        </Button>
+      </DialogTrigger>
+      <ConfirmDialog
+        title="자산군 삭제"
+        isDestructive={true}
+        confirmMessage="삭제"
+        subtitle={"정말 삭제하시겠습니까?\n삭제한 데이터는 복원할 수 없습니다."}
+        onCancel={() => setIsDialogOpen(false)}
+        onConfirm={onDelete}
+      />
+    </Dialog>
   );
 };
 
@@ -47,7 +85,7 @@ export const HoldingItem = ({ holding, isLast }: HoldingItemProps) => {
           <Percentage variant="growth" percentage={holding.growth} />
         </div>
       </div>
-      <DeleteButton />
+      <DeleteHoldingButton name={holding.name} />
     </li>
   );
 };
