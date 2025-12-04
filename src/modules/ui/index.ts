@@ -8,3 +8,4 @@ export * from "./Select";
 export * from "./Table";
 export * from "./Form";
 export * from "./Label";
+export * from "./Sonner";

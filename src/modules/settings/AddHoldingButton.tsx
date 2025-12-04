@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Plus } from "lucide-react";
 import { holdingSchema, type HoldingSchema } from "@/schema/holding.schema";
 import {
   Dialog,
@@ -18,10 +17,19 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
 } from "@/ui";
 import { useState } from "react";
+import { usePortfolio } from "@/context/PortfolioContext";
+import { toast } from "sonner";
+import { CATEGORIES } from "@/constants";
 
 export const AddHoldingButton = () => {
+  const { addHolding } = usePortfolio();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const form = useForm<HoldingSchema>({
@@ -36,8 +44,25 @@ export const AddHoldingButton = () => {
   });
 
   const onSubmit = (values: HoldingSchema) => {
-    console.table(values);
-    alert("제출 완료");
+    addHolding({
+      ...values,
+      description: values.description || "",
+      price: 0,
+      holding: 0,
+    });
+
+    form.reset();
+    setIsDialogOpen(false);
+
+    const categoryInKorean = CATEGORIES[values.category];
+
+    const id = toast(`새로운 ${categoryInKorean} 자산군 추가`, {
+      description: `${values.name} 안정형 ${values.stable}%, 성장형 ${values.growth}%`,
+      action: {
+        label: "확인",
+        onClick: () => toast.dismiss(id),
+      },
+    });
   };
 
   return (
@@ -46,7 +71,7 @@ export const AddHoldingButton = () => {
       onOpenChange={(open) => {
         if (!open) {
           setIsDialogOpen(false);
-          form.reset();
+          form.clearErrors();
         }
       }}
     >
@@ -55,8 +80,7 @@ export const AddHoldingButton = () => {
           onClick={() => setIsDialogOpen(true)}
           className="ml-auto flex gap-1"
         >
-          <span>추가하기</span>
-          <Plus size={16} />
+          추가하기
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -73,10 +97,36 @@ export const AddHoldingButton = () => {
           >
             <FormField
               control={form.control}
+              name="category"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>종류</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger className="w-1/2">
+                        <SelectValue placeholder="카테고리 선택" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="stocks">주식</SelectItem>
+                        <SelectItem value="bonds">국채</SelectItem>
+                        <SelectItem value="alternatives">대체 투자</SelectItem>
+                        <SelectItem value="cash">현금</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>자산명</FormLabel>
+                  <FormLabel>자산군</FormLabel>
                   <FormControl>
                     <Input placeholder="한국 주식" {...field} />
                   </FormControl>
@@ -104,7 +154,12 @@ export const AddHoldingButton = () => {
                 <FormItem>
                   <FormLabel>안정형(%)</FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} />
+                    <Input
+                      type="number"
+                      {...field}
+                      onChange={(event) => field.onChange(+event.target.value)}
+                      className="w-1/2"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -117,14 +172,23 @@ export const AddHoldingButton = () => {
                 <FormItem>
                   <FormLabel>성장형(%)</FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} />
+                    <Input
+                      type="number"
+                      {...field}
+                      onChange={(event) => field.onChange(+event.target.value)}
+                      className="w-1/2"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <DialogFooter>
-              <Button type="button" variant="outline">
+              <Button
+                onClick={() => setIsDialogOpen(false)}
+                type="button"
+                variant="outline"
+              >
                 취소
               </Button>
               <Button type="submit">저장</Button>
