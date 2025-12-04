@@ -18,35 +18,37 @@ export const Sidebar = () => {
   };
 
   return (
-    <div className="flex flex-col gap-3 p-3">
-      <h1 className="text-2xl font-bold tracking-wide">PF/RB</h1>
-      {BUTTONS.map((button) => {
-        const isActive = button.path === pathname;
+    <div className="relative flex flex-col gap-3">
+      <div className="sticky top-0 flex h-screen flex-col gap-3 p-3">
+        <h1 className="text-2xl font-bold tracking-wide">PF/RB</h1>
+        {BUTTONS.map((button) => {
+          const isActive = button.path === pathname;
 
-        return (
-          <Button
-            key={button.label}
-            variant={isActive ? "default" : "ghost"}
-            onClick={() => navigate(button.path)}
-            className={clsx(
-              "w-52 justify-start",
-              isActive
-                ? "bg-zinc-200 text-black hover:bg-zinc-200 active:bg-zinc-200"
-                : "variant-ghost hover:bg-zinc-100",
-            )}
-          >
-            {button.icon}
-            <span>{button.label}</span>
-          </Button>
-        );
-      })}
-      <Button
-        disabled={pathname !== PATHS.calculator}
-        onClick={onCalculate}
-        className="mt-auto w-52"
-      >
-        계산하기
-      </Button>
+          return (
+            <Button
+              key={button.label}
+              variant={isActive ? "default" : "ghost"}
+              onClick={() => navigate(button.path)}
+              className={clsx(
+                "w-52 justify-start",
+                isActive
+                  ? "bg-zinc-200 text-black hover:bg-zinc-200 active:bg-zinc-200"
+                  : "variant-ghost hover:bg-zinc-100",
+              )}
+            >
+              {button.icon}
+              <span>{button.label}</span>
+            </Button>
+          );
+        })}
+        <Button
+          disabled={pathname !== PATHS.calculator}
+          onClick={onCalculate}
+          className="mt-auto w-52"
+        >
+          계산하기
+        </Button>
+      </div>
     </div>
   );
 };
