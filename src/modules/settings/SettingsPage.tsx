@@ -12,7 +12,7 @@ export const SettingsPage = () => {
             <GroupedPortfolioSection key={key + index} category={key} />
           ))}
         </ul>
-        <div className="flex-1 rounded-xl border border-zinc-300 bg-white"></div>
+        <div className="sticky top-3 h-[calc(100vh-1.5rem)] flex-1 rounded-xl border border-zinc-300 bg-white"></div>
       </div>
     </OutletWrapper>
   );
