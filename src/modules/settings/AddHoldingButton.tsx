@@ -167,17 +167,32 @@ export const AddHoldingButton = () => {
                   </FormLabel>
                   <FormControl>
                     <Input
-                      type="number"
+                      inputMode="numeric"
                       max={100 - stable}
                       {...field}
                       onChange={(event) => {
-                        const value = +event.target.value;
+                        const raw = event.target.value;
 
-                        if (value > 100 - stable) {
+                        if (raw === "") {
+                          field.onChange("");
+                          form.clearErrors("stable");
                           return;
                         }
 
-                        field.onChange(value);
+                        const value = +raw.replace(/^0+(?=\d)/, "");
+                        const maxValue = 100 - stable;
+
+                        const clampedValue = Math.min(value, maxValue);
+                        field.onChange(clampedValue);
+
+                        if (value > maxValue) {
+                          form.setError("stable", {
+                            type: "max",
+                            message: `최대 ${maxValue}% 까지 설정할 수 있습니다.`,
+                          });
+                        } else {
+                          form.clearErrors("stable");
+                        }
                       }}
                     />
                   </FormControl>
@@ -196,17 +211,32 @@ export const AddHoldingButton = () => {
                   </FormLabel>
                   <FormControl>
                     <Input
-                      type="number"
+                      inputMode="numeric"
                       max={100 - growth}
                       {...field}
                       onChange={(event) => {
-                        const value = +event.target.value;
+                        const raw = event.target.value;
 
-                        if (value > 100 - growth) {
+                        if (raw === "") {
+                          field.onChange("");
+                          form.clearErrors("growth");
                           return;
                         }
 
-                        field.onChange(value);
+                        const value = +raw.replace(/^0+(?=\d)/, "");
+                        const maxValue = 100 - growth;
+
+                        const clamped = Math.min(value, maxValue);
+                        field.onChange(clamped);
+
+                        if (value > maxValue) {
+                          form.setError("growth", {
+                            type: "max",
+                            message: `최대 ${maxValue}% 까지 설정할 수 있습니다.`,
+                          });
+                        } else {
+                          form.clearErrors("growth");
+                        }
                       }}
                     />
                   </FormControl>
@@ -218,7 +248,9 @@ export const AddHoldingButton = () => {
               <Button onClick={closeDialog} type="button" variant="outline">
                 취소
               </Button>
-              <Button type="submit">저장</Button>
+              <Button type="submit" disabled={!form.formState.isValid}>
+                저장
+              </Button>
             </DialogFooter>
           </form>
         </Form>
