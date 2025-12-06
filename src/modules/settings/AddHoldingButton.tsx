@@ -188,15 +188,6 @@ export const AddHoldingButton = () => {
 
                         const clampedValue = Math.min(value, maxValue);
                         field.onChange(clampedValue);
-
-                        if (value > maxValue) {
-                          form.setError("stable", {
-                            type: "max",
-                            message: `최대 ${maxValue}% 까지 설정할 수 있습니다.`,
-                          });
-                        } else {
-                          form.clearErrors("stable");
-                        }
                       }}
                     />
                   </FormControl>
@@ -232,15 +223,6 @@ export const AddHoldingButton = () => {
 
                         const clamped = Math.min(value, maxValue);
                         field.onChange(clamped);
-
-                        if (value > maxValue) {
-                          form.setError("growth", {
-                            type: "max",
-                            message: `최대 ${maxValue}% 까지 설정할 수 있습니다.`,
-                          });
-                        } else {
-                          form.clearErrors("growth");
-                        }
                       }}
                     />
                   </FormControl>
