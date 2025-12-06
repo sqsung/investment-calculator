@@ -3,9 +3,11 @@ import { usePortfolio } from "@/context/PortfolioContext";
 import { Table, TableBody, TableFooter } from "@/ui";
 import { OutletWrapper } from "@/modules/shared";
 import { TableRow, Classifier, TableHeader } from "@/modules/calculator";
+import { getGroupedPortfolio } from "@/utils";
 
 export const CalculatorPage = () => {
   const { portfolio } = usePortfolio();
+  const grouped = getGroupedPortfolio(portfolio);
 
   const rebalance = () => {
     alert("리밸런싱 시작!!");
@@ -17,21 +19,46 @@ export const CalculatorPage = () => {
     return () => window.removeEventListener("calculator:run", rebalance);
   }, []);
 
+  const HOLDINGS = [
+    {
+      label: "주식",
+      holdings: grouped.stocks,
+      isEmpty: !grouped.stocks.length,
+    },
+    { label: "국채", holdings: grouped.bonds, isEmpty: !grouped.bonds.length },
+    {
+      label: "대체 투자",
+      holdings: grouped.alternatives,
+      isEmpty: !grouped.alternatives.length,
+    },
+    { label: "인출금", holdings: grouped.cash, isEmpty: !grouped.cash.length },
+  ] as const;
+
   return (
     <OutletWrapper>
-      <div className="flex h-full w-full overflow-hidden rounded-2xl border border-zinc-300 bg-zinc-100">
-        <Classifier />
+      <div className="flex w-full overflow-hidden rounded-2xl bg-zinc-100">
         <Table className="flex h-full w-full flex-col">
           <TableHeader />
           <TableBody className="flex h-full flex-col bg-white">
-            {portfolio.map((item) => (
-              <TableRow
-                key={item.description}
-                name={item.name}
-                description={item.description}
-              />
+            {HOLDINGS.map((item, index) => (
+              <div className="flex flex-1">
+                <Classifier
+                  category={item.label}
+                  isEmpty={item.isEmpty}
+                  isLast={index + 1 === HOLDINGS.length}
+                />
+                <div className="flex-1">
+                  {item.holdings.map((holding) => (
+                    <TableRow
+                      key={holding.description}
+                      name={holding.name}
+                      description={holding.description}
+                    />
+                  ))}
+                </div>
+              </div>
             ))}
-            <TableFooter className="mt-auto h-[50px] border-t border-zinc-300 bg-zinc-900"></TableFooter>
+            <TableFooter className="h-[50px] border-0 bg-zinc-900"></TableFooter>
           </TableBody>
         </Table>
       </div>

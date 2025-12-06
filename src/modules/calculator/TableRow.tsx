@@ -7,7 +7,7 @@ interface RebalancingRowProps {
 
 export const TableRow = ({ name, description }: RebalancingRowProps) => {
   return (
-    <BaseTableRow className="flex w-full flex-1">
+    <BaseTableRow className="flex h-[150px] w-full">
       <TableCell className="flex flex-1 flex-col items-center justify-center gap-1">
         <p className="text-xl font-bold">{name}</p>
         <p className="text-sm text-zinc-700">{description}</p>
@@ -40,5 +40,3 @@ export const TableRow = ({ name, description }: RebalancingRowProps) => {
     </BaseTableRow>
   );
 };
-
-export default TableRow;
