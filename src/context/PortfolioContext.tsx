@@ -59,6 +59,14 @@ export const PortfolioProvider = ({ children }: WrapperComponent) => {
 
       return updated;
     });
+
+    const id = toast(`자산군을 수정했습니다`, {
+      description: `${holding.name} 안정형 ${holding.stable}%, 성장형 ${holding.growth}%`,
+      action: {
+        label: "확인",
+        onClick: () => toast.dismiss(id),
+      },
+    });
   };
 
   const deleteHolding = (name: string) => {

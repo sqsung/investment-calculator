@@ -1,4 +1,5 @@
 import { DeleteHoldingButton } from "@/modules/settings/DeleteHoldingButton";
+import { UpdateHoldingButton } from "@/modules/settings/UpdateHoldingButton";
 import { cn } from "@/utils";
 
 interface PercentageProps {
@@ -43,7 +44,11 @@ export const HoldingItem = ({ holding, isLast }: HoldingItemProps) => {
           <Percentage variant="growth" percentage={holding.growth} />
         </div>
       </div>
-      <DeleteHoldingButton name={holding.name} />
+
+      <div className="flex flex-col gap-1">
+        <UpdateHoldingButton holding={holding} />
+        <DeleteHoldingButton name={holding.name} />
+      </div>
     </li>
   );
 };

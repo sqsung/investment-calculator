@@ -11,13 +11,18 @@ import {
   DialogDescription,
   Button,
 } from "@/ui";
+import { Pencil } from "lucide-react";
 
-export const AddHoldingButton = () => {
-  const { addHolding } = usePortfolio();
+interface UpdateHoldingButtonProps {
+  holding: Holding;
+}
+
+export const UpdateHoldingButton = ({ holding }: UpdateHoldingButtonProps) => {
+  const { updateHolding } = usePortfolio();
   const [isDialogOpen, [openDialog, closeDialog]] = useToggle();
 
   const onSubmit = (values: HoldingSchema) => {
-    addHolding({
+    updateHolding(holding.name, {
       ...values,
       description: values.description || "",
       price: 0,
@@ -37,8 +42,12 @@ export const AddHoldingButton = () => {
       }}
     >
       <DialogTrigger asChild>
-        <Button onClick={openDialog} className="ml-auto flex gap-1">
-          추가하기
+        <Button
+          variant="ghost"
+          onClick={openDialog}
+          className="ml-auto flex gap-1"
+        >
+          <Pencil className="text-zinc-500" />
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -48,7 +57,11 @@ export const AddHoldingButton = () => {
             새로운 자산군에 대한 정보를 입력해 주세요.
           </DialogDescription>
         </DialogHeader>
-        <HoldingForm onSubmit={onSubmit} onCancel={closeDialog} />
+        <HoldingForm
+          initialHolding={holding}
+          onSubmit={onSubmit}
+          onCancel={closeDialog}
+        />
       </DialogContent>
     </Dialog>
   );
