@@ -1,16 +1,18 @@
+import { PercentageCell } from "@/modules/calculator/PercentageCell";
 import { Input, TableCell, TableRow as BaseTableRow } from "@/ui";
+import { cn } from "@/utils";
 
 interface RebalancingRowProps {
-  name: string;
-  description: string;
+  holding: Holding;
+  className?: string;
 }
 
-export const TableRow = ({ name, description }: RebalancingRowProps) => {
+export const TableRow = ({ holding, className = "" }: RebalancingRowProps) => {
   return (
-    <BaseTableRow className="flex h-[150px] w-full">
+    <BaseTableRow className={cn("flex h-[150px] w-full", className)}>
       <TableCell className="flex flex-1 flex-col items-center justify-center gap-1">
-        <p className="text-xl font-bold">{name}</p>
-        <p className="text-sm text-zinc-700">{description}</p>
+        <p className="text-xl font-bold">{holding.name}</p>
+        <p className="text-sm text-zinc-700">{holding.description}</p>
       </TableCell>
 
       <TableCell className="flex flex-1 flex-col justify-center gap-3">
@@ -28,15 +30,8 @@ export const TableRow = ({ name, description }: RebalancingRowProps) => {
         <p className="text-xl font-bold">77.88%</p>
       </TableCell>
 
-      <TableCell className="flex flex-1 flex-col items-center justify-center gap-1">
-        <p>{"24% > 3,100주"}</p>
-        <p className="text-xl font-bold">+2,191주</p>
-      </TableCell>
-
-      <TableCell className="flex flex-1 flex-col items-center justify-center gap-1">
-        <p>{"24% > 3,100주"}</p>
-        <p className="text-xl font-bold">+2,191주</p>
-      </TableCell>
+      <PercentageCell percentage={holding.stable} />
+      <PercentageCell percentage={holding.growth} />
     </BaseTableRow>
   );
 };

@@ -47,13 +47,9 @@ export const CalculatorPage = () => {
                   isEmpty={item.isEmpty}
                   isLast={index + 1 === HOLDINGS.length}
                 />
-                <div className="flex-1">
+                <div className="flex flex-1 flex-col justify-center">
                   {item.holdings.map((holding) => (
-                    <TableRow
-                      key={holding.description}
-                      name={holding.name}
-                      description={holding.description}
-                    />
+                    <TableRow key={holding.name} holding={holding} />
                   ))}
                 </div>
               </div>
