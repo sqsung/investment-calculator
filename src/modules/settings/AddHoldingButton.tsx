@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, type ControllerRenderProps } from "react-hook-form";
 import { holdingSchema, type HoldingSchema } from "@/schema/holding.schema";
 import { usePortfolio } from "@/context/PortfolioContext";
 import { useToggle } from "@/hooks";
@@ -26,6 +26,7 @@ import {
   SelectItem,
   SelectValue,
 } from "@/ui";
+import type { ChangeEvent } from "react";
 
 export const AddHoldingButton = () => {
   const { portfolio, addHolding } = usePortfolio();
@@ -43,6 +44,38 @@ export const AddHoldingButton = () => {
   });
 
   const { stable, growth } = getTotalPercentages(portfolio);
+
+  const onPercentageChange = (
+    event: ChangeEvent<HTMLInputElement>,
+    field: ControllerRenderProps<HoldingSchema, PercentageType>,
+  ) => {
+    const type = field.name;
+    const raw = event.target.value;
+
+    if (raw === "") {
+      field.onChange("");
+      form.clearErrors(type);
+      return;
+    }
+
+    const numeric = +raw.replace(/^0+(?=\d)/, "");
+
+    if (isNaN(numeric)) {
+      return;
+    }
+
+    const isGrowth = type === "growth";
+    const max = 100 - (isGrowth ? growth : stable);
+    const clamped = Math.min(numeric, max);
+
+    if (numeric > max) {
+      alert(
+        `${isGrowth ? "성장형" : "안정형"}은 현재 ${max}%까지 설정 가능합니다`,
+      );
+    }
+
+    field.onChange(clamped);
+  };
 
   const onSubmit = (values: HoldingSchema) => {
     addHolding({
@@ -154,21 +187,7 @@ export const AddHoldingButton = () => {
                       inputMode="numeric"
                       max={100 - stable}
                       {...field}
-                      onChange={(event) => {
-                        const raw = event.target.value;
-
-                        if (raw === "") {
-                          field.onChange("");
-                          form.clearErrors("stable");
-                          return;
-                        }
-
-                        const value = +raw.replace(/^0+(?=\d)/, "");
-                        const maxValue = 100 - stable;
-
-                        const clampedValue = Math.min(value, maxValue);
-                        field.onChange(clampedValue);
-                      }}
+                      onChange={(event) => onPercentageChange(event, field)}
                     />
                   </FormControl>
                   <FormMessage />
@@ -189,21 +208,7 @@ export const AddHoldingButton = () => {
                       inputMode="numeric"
                       max={100 - growth}
                       {...field}
-                      onChange={(event) => {
-                        const raw = event.target.value;
-
-                        if (raw === "") {
-                          field.onChange("");
-                          form.clearErrors("growth");
-                          return;
-                        }
-
-                        const value = +raw.replace(/^0+(?=\d)/, "");
-                        const maxValue = 100 - growth;
-
-                        const clamped = Math.min(value, maxValue);
-                        field.onChange(clamped);
-                      }}
+                      onChange={(event) => onPercentageChange(event, field)}
                     />
                   </FormControl>
                   <FormMessage />

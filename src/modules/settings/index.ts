@@ -1,5 +1,6 @@
 export * from "./SettingsHeader";
 export * from "./AddHoldingButton";
+export * from "./DeleteHoldingButton";
 export * from "./ResetPortfolioButton";
 export * from "./HoldingItem";
 export * from "./HoldingsSection";

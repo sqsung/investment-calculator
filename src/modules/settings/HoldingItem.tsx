@@ -1,51 +1,5 @@
-import { Trash } from "lucide-react";
-import { usePortfolio } from "@/context/PortfolioContext";
-import { ConfirmDialog } from "@/modules/shared/ConfirmDialog";
-import { Button, Dialog, DialogTrigger } from "@/modules/ui";
+import { DeleteHoldingButton } from "@/modules/settings/DeleteHoldingButton";
 import { cn } from "@/utils";
-import { useToggle } from "@/hooks";
-
-interface DeleteHoldingButtonProps {
-  name: string;
-}
-
-const DeleteHoldingButton = ({ name }: DeleteHoldingButtonProps) => {
-  const { deleteHolding } = usePortfolio();
-  const [isDialogOpen, [openDialog, closeDialog]] = useToggle();
-
-  const onDelete = () => {
-    deleteHolding(name);
-  };
-
-  return (
-    <Dialog
-      open={isDialogOpen}
-      onOpenChange={(open) => {
-        if (!open) {
-          closeDialog();
-        }
-      }}
-    >
-      <DialogTrigger asChild={true}>
-        <Button
-          onClick={openDialog}
-          variant="ghost"
-          className="ml-auto flex items-center gap-3"
-        >
-          <Trash className="text-zinc-500" />
-        </Button>
-      </DialogTrigger>
-      <ConfirmDialog
-        title="자산군 삭제"
-        isDestructive={true}
-        confirmMessage="삭제"
-        subtitle={"정말 삭제하시겠습니까?\n삭제한 데이터는 복원할 수 없습니다."}
-        onCancel={closeDialog}
-        onConfirm={onDelete}
-      />
-    </Dialog>
-  );
-};
 
 interface PercentageProps {
   variant: PercentageType;
@@ -53,12 +7,17 @@ interface PercentageProps {
 }
 
 const Percentage = ({ variant, percentage }: PercentageProps) => {
-  const label = variant === "growth" ? "성장" : "안정";
+  const isGrowth = variant === "growth";
+  const label = isGrowth ? "성장" : "안정";
 
   return (
     <div className="flex gap-1 text-zinc-500">
       <span>{label}</span>
-      <span className="font-bold text-orange-500">{percentage}%</span>
+      <span
+        className={cn("font-bold", isGrowth ? "text-red-500" : "text-blue-500")}
+      >
+        {percentage}%
+      </span>
     </div>
   );
 };
