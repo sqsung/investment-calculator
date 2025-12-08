@@ -112,6 +112,12 @@ export const CalculatorPage = () => {
           <TableBody className="flex h-full flex-col bg-white">
             {PORTFOLIO_BY_CATEGORY.map((group, index) => {
               const isLast = index + 1 === PORTFOLIO_BY_CATEGORY.length;
+              const isGroupEmpty = !group.holdings?.[0];
+
+              if (isGroupEmpty) {
+                return null;
+              }
+
               const isCash = group.holdings[0].category === "cash";
 
               return (
