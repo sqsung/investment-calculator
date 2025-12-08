@@ -9,6 +9,8 @@ export const OutletWrapper = ({
   children,
 }: OutletWrapperProps) => {
   return (
-    <div className={cn("relative me-1 flex-1 py-3", className)}>{children}</div>
+    <div className={cn("relative me-1 min-w-[1200px] flex-1 py-3", className)}>
+      {children}
+    </div>
   );
 };
