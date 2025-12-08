@@ -7,6 +7,7 @@ interface HoldingRowProps {
   holding: Holding;
   total: number;
   value: PortfolioInputObject;
+  isCalculated: boolean;
   onValueChange: (name: string, value: PortfolioInputObject) => void;
 }
 
@@ -14,6 +15,7 @@ export const HoldingRow = ({
   holding,
   value,
   total,
+  isCalculated,
   onValueChange,
 }: HoldingRowProps) => {
   const onChange = (
@@ -72,12 +74,14 @@ export const HoldingRow = ({
         total={total}
         percentage={holding.stable}
         value={value}
+        isCalculated={isCalculated}
       />
       <PercentageCell
         unit="주"
         total={total}
         percentage={holding.growth}
         value={value}
+        isCalculated={isCalculated}
       />
     </TableRow>
   );

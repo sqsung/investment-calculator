@@ -5,12 +5,14 @@ import { getCurrentRatio, getNumberWithCommas } from "@/utils";
 interface DepositRowProps {
   deposit: number;
   total: number;
+  isCalculated: boolean;
   onDepositChange: (value: number) => void;
 }
 
 export const DepositRow = ({
   total,
   deposit,
+  isCalculated,
   onDepositChange,
 }: DepositRowProps) => {
   return (
@@ -18,7 +20,6 @@ export const DepositRow = ({
       <TableCell className="flex flex-1 flex-col items-center justify-center gap-1">
         <p className="text-xl font-bold">예수금</p>
       </TableCell>
-
       <TableCell className="flex flex-1 flex-col justify-center gap-3">
         <div className="flex items-center gap-1">
           <p className="w-[50px] font-bold">금액</p>
@@ -38,15 +39,14 @@ export const DepositRow = ({
           />
         </div>
       </TableCell>
-
       <TableCell className="flex flex-1 items-center justify-center">
         <p className="text-xl font-bold">{getCurrentRatio(deposit, total)}%</p>
       </TableCell>
-
       <PercentageCell
         percentage={0}
         unit="원"
         total={total}
+        isCalculated={isCalculated}
         value={{
           price: deposit,
           quantity: 0,
@@ -56,6 +56,7 @@ export const DepositRow = ({
         percentage={0}
         unit="원"
         total={total}
+        isCalculated={isCalculated}
         value={{
           price: deposit,
           quantity: 0,

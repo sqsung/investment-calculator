@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { usePortfolio } from "@/context/PortfolioContext";
 import { Table, TableBody, TableFooter } from "@/ui";
 import { OutletWrapper } from "@/modules/shared";
@@ -26,6 +26,10 @@ export const CalculatorPage = () => {
   });
 
   const onValueChange = (key: string, value: PortfolioInputObject) => {
+    if (isCalculated) {
+      setIsCalculated(false);
+    }
+
     setValues((previous) => {
       const target = previous[key];
 
@@ -40,16 +44,37 @@ export const CalculatorPage = () => {
     });
   };
 
+  const onDepositChange = (newDeposit: number) => {
+    if (isCalculated) {
+      setIsCalculated(false);
+    }
+
+    setDeposit(newDeposit);
+  };
+
+  const valuesRef = useRef(values);
+
+  useEffect(() => {
+    valuesRef.current = values;
+  }, [values]);
+
   const total =
     Object.values(values).reduce((sum, state) => {
       return sum + state.price * state.quantity;
     }, 0) + deposit || 0;
 
-  const rebalance = () => {
-    alert("리밸런싱 시작!!");
-  };
-
   useEffect(() => {
+    const rebalance = () => {
+      const prices = Object.values(valuesRef.current).map(({ price }) => price);
+
+      if (prices.includes(0)) {
+        alert("각 자산군의 가격을 설정해 주세요");
+        return;
+      }
+
+      setIsCalculated(true);
+    };
+
     window.addEventListener("calculator:run", rebalance);
 
     return () => window.removeEventListener("calculator:run", rebalance);
@@ -91,6 +116,7 @@ export const CalculatorPage = () => {
                     {group.holdings.map((holding) => (
                       <Fragment key={holding.name}>
                         <HoldingRow
+                          isCalculated={isCalculated}
                           holding={holding}
                           total={total}
                           value={values[holding.name]}
@@ -98,9 +124,10 @@ export const CalculatorPage = () => {
                         />
                         {isLast && isCash && (
                           <DepositRow
+                            isCalculated={isCalculated}
                             total={total}
                             deposit={deposit}
-                            onDepositChange={setDeposit}
+                            onDepositChange={onDepositChange}
                           />
                         )}
                       </Fragment>
