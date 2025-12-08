@@ -8,12 +8,14 @@ import {
   TableHeader,
   DepositRow,
 } from "@/modules/calculator";
-import { getGroupedPortfolio } from "@/utils";
+import { getGroupedPortfolio, getNumberWithCommas } from "@/utils";
 
 export const CalculatorPage = () => {
   const { portfolio } = usePortfolio();
   const grouped = getGroupedPortfolio(portfolio);
 
+  const [deposit, setDeposit] = useState(0);
+  const [isCalculated, setIsCalculated] = useState(false);
   const [values, setValues] = useState(() => {
     return Object.fromEntries(
       portfolio.map((holding) => [
@@ -22,8 +24,6 @@ export const CalculatorPage = () => {
       ]),
     );
   });
-
-  const [deposit, setDeposit] = useState(0);
 
   const onValueChange = (key: string, value: PortfolioInputObject) => {
     setValues((previous) => {
@@ -109,7 +109,16 @@ export const CalculatorPage = () => {
                 </div>
               );
             })}
-            <TableFooter className="h-[50px] border-0 bg-zinc-900"></TableFooter>
+            <TableFooter className="flex h-[50px] items-center border-0 bg-zinc-900 text-white">
+              <p className="flex w-[100px] items-center justify-center">합계</p>
+              <div className="flex-1" />
+              <p className="flex flex-1 justify-end gap-3 text-lg">
+                {getNumberWithCommas(total)}원
+              </p>
+              <div className="flex-1" />
+              <div className="flex-1" />
+              <div className="flex-1" />
+            </TableFooter>
           </TableBody>
         </Table>
       </div>

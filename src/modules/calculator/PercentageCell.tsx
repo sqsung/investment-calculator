@@ -1,19 +1,59 @@
 import { TableCell } from "@/modules/ui";
+import { cn, getNumberWithCommas, getTargetAmount } from "@/utils";
 
 interface PercentageCellProps {
   percentage: number;
+  total: number;
   unit: string;
+  value: PortfolioInputObject;
 }
 
-export const PercentageCell = ({ percentage, unit }: PercentageCellProps) => {
-  const goal = "> 3,100주";
+export const PercentageCell = ({
+  total,
+  percentage,
+  unit,
+  value,
+}: PercentageCellProps) => {
+  const targetAmount = Math.floor(getTargetAmount(total, percentage));
+  const targetQty = value.price ? Math.floor(targetAmount / value.price) : 0;
+  const differenceQty = Math.floor(targetQty - value.quantity);
+
+  console.table({
+    targetAmount,
+    targetQty,
+    differenceQty,
+    price: value.price,
+  });
+
+  const status = (() => {
+    if (differenceQty === 0) {
+      return "equal";
+    }
+
+    if (differenceQty > 0) {
+      return "more";
+    }
+
+    return "less";
+  })();
+  const goal = `> ${getNumberWithCommas(targetQty)}${unit}`;
 
   return (
     <TableCell className="flex flex-1 flex-col items-center justify-center gap-1">
       <p>
         {percentage}% {goal}
       </p>
-      <p className="text-xl font-bold">+2,191{unit}</p>
+      <p
+        className={cn(
+          "text-xl font-bold text-zinc-500",
+          status === "more" && "text-red-500",
+          status === "less" && "text-blue-500",
+        )}
+      >
+        {status === "more" ? "+" : ""}
+        {getNumberWithCommas(differenceQty)}
+        {unit}
+      </p>
     </TableCell>
   );
 };

@@ -62,3 +62,7 @@ export const checkIsValidCategory = (
 export const getCurrentRatio = (value: number, total: number) => {
   return ((value / total) * 100 || 0).toFixed(2);
 };
+
+export const getTargetAmount = (total: number, targetPercentage: number) => {
+  return total * (targetPercentage * 0.01);
+};

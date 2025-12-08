@@ -67,8 +67,18 @@ export const HoldingRow = ({
         </p>
       </TableCell>
 
-      <PercentageCell percentage={holding.stable} unit="주" />
-      <PercentageCell percentage={holding.growth} unit="주" />
+      <PercentageCell
+        unit="주"
+        total={total}
+        percentage={holding.stable}
+        value={value}
+      />
+      <PercentageCell
+        unit="주"
+        total={total}
+        percentage={holding.growth}
+        value={value}
+      />
     </TableRow>
   );
 };

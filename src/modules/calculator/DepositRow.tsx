@@ -43,8 +43,24 @@ export const DepositRow = ({
         <p className="text-xl font-bold">{getCurrentRatio(deposit, total)}%</p>
       </TableCell>
 
-      <PercentageCell percentage={0} unit="원" />
-      <PercentageCell percentage={0} unit="원" />
+      <PercentageCell
+        percentage={0}
+        unit="원"
+        total={total}
+        value={{
+          price: deposit,
+          quantity: 0,
+        }}
+      />
+      <PercentageCell
+        percentage={0}
+        unit="원"
+        total={total}
+        value={{
+          price: deposit,
+          quantity: 0,
+        }}
+      />
     </TableRow>
   );
 };
