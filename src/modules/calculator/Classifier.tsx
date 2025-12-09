@@ -2,28 +2,30 @@ import { CATEGORIES } from "@/constants";
 import { cn } from "@/utils";
 
 interface ClassifierProps {
-  category: (typeof CATEGORIES)[PortfolioCategory];
+  category: PortfolioCategory;
   isEmpty: boolean;
-  isLast?: boolean;
+  className?: string;
 }
 
 export const Classifier = ({
   category,
   isEmpty,
-  isLast = false,
+  className = "",
 }: ClassifierProps) => {
   if (isEmpty) {
     return null;
   }
 
+  const categoryInKorean = CATEGORIES[category];
+
   return (
     <span
       className={cn(
         "flex w-[100px] shrink-0 items-center justify-center border-b border-zinc-700 bg-zinc-900 text-sm font-bold text-white",
-        isLast && "border-0",
+        className,
       )}
     >
-      {category}
+      {categoryInKorean}
     </span>
   );
 };
