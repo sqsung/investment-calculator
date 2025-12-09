@@ -14,7 +14,6 @@ export const HoldingRow = ({
   holding,
   value,
   total,
-
   onValueChange,
 }: HoldingRowProps) => {
   const onChange = (

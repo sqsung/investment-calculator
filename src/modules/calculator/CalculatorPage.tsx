@@ -8,7 +8,12 @@ import {
   TableHeader,
   DepositRow,
 } from "@/modules/calculator";
-import { getGroupedPortfolio, getNumberWithCommas } from "@/utils";
+import {
+  checkIsValidCategory,
+  cn,
+  getGroupedPortfolio,
+  getNumberWithCommas,
+} from "@/utils";
 import { SAVE_CUSTOM_EVENT } from "@/constants";
 
 export const CalculatorPage = () => {
@@ -89,62 +94,50 @@ export const CalculatorPage = () => {
     };
   }, [portfolio, savePortfolio]);
 
-  const PORTFOLIO_BY_CATEGORY = [
-    {
-      label: "주식",
-      holdings: grouped.stocks,
-      isEmpty: !grouped.stocks.length,
-    },
-    { label: "국채", holdings: grouped.bonds, isEmpty: !grouped.bonds.length },
-    {
-      label: "대체 투자",
-      holdings: grouped.alternatives,
-      isEmpty: !grouped.alternatives.length,
-    },
-    { label: "인출금", holdings: grouped.cash, isEmpty: !grouped.cash.length },
-  ] as const;
-
   return (
     <OutletWrapper>
       <div className="flex h-full w-full overflow-hidden rounded-2xl bg-zinc-100">
         <Table className="flex h-full w-full flex-col">
           <TableHeader />
           <TableBody className="flex h-full flex-col bg-white">
-            {PORTFOLIO_BY_CATEGORY.map((group, index) => {
-              const isLast = index + 1 === PORTFOLIO_BY_CATEGORY.length;
-              const isGroupEmpty = !group.holdings?.[0];
-
-              if (isGroupEmpty) {
+            {Object.entries(grouped).map(([category, holdings], index) => {
+              if (!checkIsValidCategory(category)) {
                 return null;
               }
 
-              const isCash = group.holdings[0].category === "cash";
-
               return (
-                <div className="flex flex-1">
+                <div key={category} className="flex flex-1">
                   <Classifier
-                    category={group.label}
-                    isEmpty={group.isEmpty}
-                    isLast={isLast}
+                    category={category}
+                    isEmpty={!holdings.length}
+                    className={cn(
+                      index + 1 === 4 && "border-b",
+                      index === 0 && "border-t",
+                    )}
                   />
                   <div className="flex flex-1 flex-col justify-center">
-                    {group.holdings.map((holding) => (
-                      <Fragment key={holding.name}>
-                        <HoldingRow
-                          holding={holding}
-                          total={total}
-                          value={values[holding.name]}
-                          onValueChange={onValueChange}
-                        />
-                        {isLast && isCash && (
-                          <DepositRow
+                    {holdings.map((holding, index) => {
+                      const isLast = index + 1 === holdings.length;
+                      const isCash = category === "cash";
+
+                      return (
+                        <Fragment key={holding.name}>
+                          <HoldingRow
+                            holding={holding}
                             total={total}
-                            deposit={deposit}
-                            onDepositChange={onDepositChange}
+                            value={values[holding.name]}
+                            onValueChange={onValueChange}
                           />
-                        )}
-                      </Fragment>
-                    ))}
+                          {isLast && isCash && (
+                            <DepositRow
+                              total={total}
+                              deposit={deposit}
+                              onDepositChange={onDepositChange}
+                            />
+                          )}
+                        </Fragment>
+                      );
+                    })}
                   </div>
                 </div>
               );
@@ -165,3 +158,44 @@ export const CalculatorPage = () => {
     </OutletWrapper>
   );
 };
+
+//   const
+
+//   const isLast = index + 1 === PORTFOLIO_BY_CATEGORY.length;
+//   const isGroupEmpty = !group.holdings?.[0];
+
+//   if (isGroupEmpty) {
+//     return null;
+//   }
+
+//   const isCash = group.holdings[0].category === "cash";
+
+//   return (
+//     <div className="flex flex-1">
+//       <Classifier
+//         category={group.label}
+//         isEmpty={group.isEmpty}
+//         isLast={isLast}
+//       />
+//       <div className="flex flex-1 flex-col justify-center">
+//         {group.holdings.map((holding) => (
+//           <Fragment key={holding.name}>
+//             <HoldingRow
+//               holding={holding}
+//               total={total}
+//               value={values[holding.name]}
+//               onValueChange={onValueChange}
+//             />
+//             {isLast && isCash && (
+//               <DepositRow
+//                 total={total}
+//                 deposit={deposit}
+//                 onDepositChange={onDepositChange}
+//               />
+//             )}
+//           </Fragment>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// })}
