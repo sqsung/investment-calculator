@@ -26,7 +26,7 @@ const PortfolioContext = createContext<PortfolioContext>({
   resetPortfolio: () => {},
 });
 
-export const PortfolioProvider = ({ children }: WrapperComponent) => {
+export const PortfolioContextProvider = ({ children }: WrapperComponent) => {
   const [portfolio, setPortfolio] = useState<Portfolio>(() => {
     const saved = localStorage.getItem("portfolio");
 
