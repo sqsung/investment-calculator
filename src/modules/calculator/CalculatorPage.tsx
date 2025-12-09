@@ -7,14 +7,12 @@ import {
   useState,
 } from "react";
 import { usePortfolioContext } from "@/context";
-import { Table, TableBody } from "@/modules/ui";
-import { OutletWrapper } from "@/modules/shared";
+import { TableBody } from "@/modules/ui";
 import {
   HoldingRow,
-  TableFooter,
   Classifier,
-  TableHeader,
   DepositRow,
+  RebalancerTable,
 } from "@/modules/calculator";
 import { checkIsValidCategory, cn, getGroupedPortfolio } from "@/utils";
 import { SAVE_CUSTOM_EVENT } from "@/constants";
@@ -101,57 +99,51 @@ export const CalculatorPage = () => {
   }, [portfolio, savePortfolio]);
 
   return (
-    <OutletWrapper>
-      <div className="flex h-full w-full overflow-hidden rounded-2xl bg-zinc-100">
-        <Table className="flex h-full w-full flex-col">
-          <TableHeader />
-          <TableBody className="flex h-full flex-col bg-white">
-            {Object.entries(grouped).map(([category, holdings], index) => {
-              if (!checkIsValidCategory(category)) {
-                return null;
-              }
+    <RebalancerTable>
+      <TableBody className="flex h-full flex-1 flex-col bg-white">
+        {Object.entries(grouped).map(([category, holdings], index) => {
+          if (!checkIsValidCategory(category)) {
+            return null;
+          }
 
-              return (
-                <div key={category} className="flex flex-1">
-                  <Classifier
-                    category={category}
-                    isEmpty={!holdings.length}
-                    className={cn(
-                      index + 1 === 4 && "border-b",
-                      index === 0 && "border-t",
-                    )}
-                  />
-                  <div className="flex flex-1 flex-col justify-center">
-                    {holdings.map((holding, index) => {
-                      const isLast = index + 1 === holdings.length;
-                      const isCash = category === "cash";
+          return (
+            <div key={category} className="flex flex-1">
+              <Classifier
+                category={category}
+                isEmpty={!holdings.length}
+                className={cn(
+                  index + 1 === 4 && "border-b",
+                  index === 0 && "border-t",
+                )}
+              />
+              <div className="flex flex-1 flex-col justify-center">
+                {holdings.map((holding, index) => {
+                  const isLast = index + 1 === holdings.length;
+                  const isCash = category === "cash";
 
-                      return (
-                        <Fragment key={holding.name}>
-                          <HoldingRow
-                            holding={holding}
-                            total={total}
-                            value={values[holding.name]}
-                            onValueChange={onValueChange}
-                          />
-                          {isLast && isCash && (
-                            <DepositRow
-                              total={total}
-                              deposit={deposit}
-                              onDepositChange={onDepositChange}
-                            />
-                          )}
-                        </Fragment>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            })}
-          </TableBody>
-          <TableFooter total={total} />
-        </Table>
-      </div>
-    </OutletWrapper>
+                  return (
+                    <Fragment key={holding.name}>
+                      <HoldingRow
+                        holding={holding}
+                        total={total}
+                        value={values[holding.name]}
+                        onValueChange={onValueChange}
+                      />
+                      {isLast && isCash && (
+                        <DepositRow
+                          total={total}
+                          deposit={deposit}
+                          onDepositChange={onDepositChange}
+                        />
+                      )}
+                    </Fragment>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </TableBody>
+    </RebalancerTable>
   );
 };
