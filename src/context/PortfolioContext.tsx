@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { CATEGORIES, DEFAULT_PORTFOLIO } from "@/constants";
 import { toast } from "sonner";
 
@@ -36,7 +42,7 @@ export const PortfolioProvider = ({ children }: WrapperComponent) => {
     localStorage.setItem("portfolio", JSON.stringify(portfolio));
   }, [portfolio]);
 
-  const addHolding = (holding: Holding) => {
+  const addHolding = useCallback((holding: Holding) => {
     setPortfolio((previous) => [...previous, holding]);
 
     const categoryInKorean = CATEGORIES[holding.category];
@@ -48,9 +54,9 @@ export const PortfolioProvider = ({ children }: WrapperComponent) => {
         onClick: () => toast.dismiss(id),
       },
     });
-  };
+  }, []);
 
-  const updateHolding = (name: string, holding: Holding) => {
+  const updateHolding = useCallback((name: string, holding: Holding) => {
     setPortfolio((previous) => {
       const updated = previous.map((looped) => {
         const isTarget = looped.name === name;
@@ -67,9 +73,9 @@ export const PortfolioProvider = ({ children }: WrapperComponent) => {
         onClick: () => toast.dismiss(id),
       },
     });
-  };
+  }, []);
 
-  const deleteHolding = (name: string) => {
+  const deleteHolding = useCallback((name: string) => {
     setPortfolio((previous) =>
       previous.filter((looped) => looped.name !== name),
     );
@@ -80,9 +86,9 @@ export const PortfolioProvider = ({ children }: WrapperComponent) => {
         onClick: () => toast.dismiss(id),
       },
     });
-  };
+  }, []);
 
-  const resetPortfolio = () => {
+  const resetPortfolio = useCallback(() => {
     setPortfolio(DEFAULT_PORTFOLIO);
 
     const id = toast("포트폴리오를 초기화 했습니다", {
@@ -91,20 +97,23 @@ export const PortfolioProvider = ({ children }: WrapperComponent) => {
         onClick: () => toast.dismiss(id),
       },
     });
-  };
+  }, []);
 
-  const savePortfolio = (portfolio: Portfolio, isToastNeeded: boolean) => {
-    setPortfolio(portfolio);
+  const savePortfolio = useCallback(
+    (portfolio: Portfolio, isToastNeeded: boolean) => {
+      setPortfolio(portfolio);
 
-    if (isToastNeeded) {
-      const id = toast("현재 설정을 저장했습니다", {
-        action: {
-          label: "확인",
-          onClick: () => toast.dismiss(id),
-        },
-      });
-    }
-  };
+      if (isToastNeeded) {
+        const id = toast("현재 설정을 저장했습니다", {
+          action: {
+            label: "확인",
+            onClick: () => toast.dismiss(id),
+          },
+        });
+      }
+    },
+    [],
+  );
 
   return (
     <PortfolioContext.Provider
