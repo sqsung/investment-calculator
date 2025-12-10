@@ -13,8 +13,8 @@ interface PortfolioContext {
   addHolding: (holding: Holding) => void;
   updateHolding: (name: string, holding: Holding) => void;
   deleteHolding: (name: string) => void;
-  savePortfolio: (portfolio: Portfolio, isToastNeeded: boolean) => void;
   resetPortfolio: () => void;
+  savePortfolio: (portfolio: Portfolio, isToastNeeded: boolean) => void;
 }
 
 const PortfolioContext = createContext<PortfolioContext>({

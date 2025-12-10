@@ -37,11 +37,8 @@ export const CalculatorPage = () => {
 
   useEffect(() => {
     valuesRef.current = values;
-  }, [values]);
-
-  useEffect(() => {
     depositRef.current = deposit;
-  }, [deposit]);
+  }, [values, deposit]);
 
   const onRebalance = useCallback(() => {
     const valuesArray = Object.values(valuesRef.current);
@@ -70,7 +67,7 @@ export const CalculatorPage = () => {
       });
     }
 
-    savePortfolio(updated, true);
+    savePortfolio(updated, false);
     onTotalChange(total);
   }, [portfolio, savePortfolio, onTotalChange]);
 
