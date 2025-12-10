@@ -1,18 +1,18 @@
-import { useTotalContext } from "@/context";
-import { PercentageCell } from "@/modules/calculator/PercentageCell";
-import { Input, TableCell, TableRow } from "@/modules/ui";
-import { getCurrentRatio, getNumberWithCommas } from "@/utils";
 import { memo, type ChangeEvent } from "react";
+import { useTotalContext } from "@/context";
+import { getCurrentRatio, getNumberWithCommas } from "@/utils";
+import { PercentageCell } from "@/modules/calculator";
+import { Input, TableCell, TableRow } from "@/modules/ui";
 
-interface HoldingRowProps {
+interface HoldingRowProps extends PortfolioInputObject {
   holding: Holding;
-  value: PortfolioInputObject;
   onValueChange: (name: string, value: PortfolioInputObject) => void;
 }
 
 export const HoldingRow = memo(
-  ({ holding, value, onValueChange }: HoldingRowProps) => {
+  ({ holding, price, quantity, onValueChange }: HoldingRowProps) => {
     const { total } = useTotalContext();
+    const rowAmount = price * quantity;
 
     const onChange = (
       event: ChangeEvent<HTMLInputElement>,
@@ -21,19 +21,16 @@ export const HoldingRow = memo(
       const numeric = +event.target.value.trim().replace(/,/g, "");
 
       if (isNaN(numeric) || numeric < 0) {
-        alert(
-          `${field === "price" ? "가격" : "보유량"}은 0 이상이어야 합니다.`,
-        );
+        alert(`${field === "price" ? "가격" : "수량"}은 0 이상이어야 합니다.`);
         return;
       }
 
       onValueChange(holding.name, {
-        ...value,
+        price,
+        quantity,
         [field]: numeric,
       });
     };
-
-    const rowAmount = value.price * value.quantity;
 
     return (
       <TableRow className="flex h-[150px] w-full">
@@ -41,34 +38,41 @@ export const HoldingRow = memo(
           <p className="text-xl font-bold">{holding.name}</p>
           <p className="text-sm text-zinc-700">{holding.description}</p>
         </TableCell>
-
         <TableCell className="flex flex-1 flex-col justify-center gap-3">
           <div className="flex items-center gap-1">
             <p className="w-[50px] font-bold">가격</p>
             <Input
               type="numeric"
-              value={getNumberWithCommas(value.price)}
+              value={getNumberWithCommas(price)}
               onChange={(event) => onChange(event, "price")}
             />
           </div>
           <div className="flex items-center gap-1">
-            <p className="w-[50px] font-bold">보유량</p>
+            <p className="w-[50px] font-bold">수량</p>
             <Input
               type="numeric"
-              value={getNumberWithCommas(value.quantity)}
+              value={getNumberWithCommas(quantity)}
               onChange={(event) => onChange(event, "quantity")}
             />
           </div>
         </TableCell>
-
         <TableCell className="flex flex-1 items-center justify-center">
           <p className="text-xl font-bold">
             {getCurrentRatio(rowAmount, total ?? 0)}%
           </p>
         </TableCell>
-
-        <PercentageCell unit="주" percentage={holding.stable} value={value} />
-        <PercentageCell unit="주" percentage={holding.growth} value={value} />
+        <PercentageCell
+          unit="주"
+          percentage={holding.stable}
+          price={price}
+          quantity={quantity}
+        />
+        <PercentageCell
+          unit="주"
+          percentage={holding.growth}
+          price={price}
+          quantity={quantity}
+        />
       </TableRow>
     );
   },

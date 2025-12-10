@@ -1,10 +1,10 @@
-import { useTotalContext } from "@/context/TotalContext";
+import { useTotalContext } from "@/context";
 import { OutletWrapper } from "@/modules/shared";
 import { Table, TableFooter, TableHead, TableHeader } from "@/modules/ui";
 import { cn, getNumberWithCommas } from "@/utils";
 
 const Header = () => {
-  const labels = ["구분", "자산군", "보유", "현재 비율", "안정형", "성장형"];
+  const labels = ["구분", "자산군", "수량", "현재 비율", "안정형", "성장형"];
 
   return (
     <TableHeader className="border-b-none flex border border-zinc-900 bg-zinc-900">
